@@ -1,0 +1,13 @@
+Font: Meiryo  Style: Regular
+Point Size: 83   Padding: 5   SP/PD Ratio: 6.0%
+
+Characters included: 36/37
+Missing characters: 1
+Excluded characters: 0
+
+Characters missing from font file:
+----------------------------------------
+ID: 9	Hex: 9	Char [	]
+
+Characters excluded from packing:
+----------------------------------------
