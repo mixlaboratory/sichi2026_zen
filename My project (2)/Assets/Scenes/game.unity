@@ -396,6 +396,7 @@ MonoBehaviour:
   focusColor: {r: 0.2, g: 0.7, b: 0.3, a: 0.8}
   dangerColor: {r: 1, g: 0.7, b: 0, a: 0.8}
   outColor: {r: 0.9, g: 0.2, b: 0.2, a: 0.8}
+  resultFilePath: "C:\\Users\\manam\\OneDrive\\\u30C7\u30B9\u30AF\u30C8\u30C3\u30D7\\MixLab\\SICHI\\2026\\neu_ExBrainSdk_dotnet_v3.1.0\\samples\\MyBrainApp\\bin\\Debug\\net8.0\\output\\result.txt"
 --- !u!114 &861648707
 MonoBehaviour:
   m_ObjectHideFlags: 0

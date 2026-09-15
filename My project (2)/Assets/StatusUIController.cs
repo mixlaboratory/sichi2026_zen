@@ -1,9 +1,9 @@
 using System.Collections;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
-using UnityEngine.InputSystem;
 
 public class StatusUIController : MonoBehaviour
 {
@@ -14,50 +14,101 @@ public class StatusUIController : MonoBehaviour
     public Color dangerColor = Color.yellow;
     public Color outColor = Color.red;
 
-    // リザルト画面に渡す値
+    // MyBrainAppのresult.txt
+   public string resultFilePath =
+    @"C:\Users\manam\OneDrive\デスクトップ\MixLab\SICHI\2026\neu_ExBrainSdk_dotnet_v3.1.0\samples\MyBrainApp\bin\Debug\net8.0\output\result.txt";
+
     public static int dangerCount = 0;
     public static float focusTime = 0f;
 
-    // 1 = 集中している
-    // 2 = 危ない
-    // 3 = アウト
-    private int currentState = 1;
-
+    private int currentState = 0;
     private bool isFinished = false;
 
     void Start()
     {
-        // ゲーム開始時にリセット
         dangerCount = 0;
         focusTime = 0f;
 
         SetFocus();
+
+        Debug.Log("読み込むファイル：" + resultFilePath);
+        Debug.Log("ファイル存在：" + File.Exists(resultFilePath));
+
+        StartCoroutine(ReadResultLoop());
     }
 
     void Update()
     {
         if (isFinished) return;
 
-        // 集中している間だけ時間を加算
-        if (currentState == 1)
+        // 0の状態の間だけ集中時間を加算
+        if (currentState == 0)
         {
             focusTime += Time.deltaTime;
         }
+    }
 
-        // テスト用
-        if (Keyboard.current.digit1Key.wasPressedThisFrame)
+    IEnumerator ReadResultLoop()
+    {
+        while (!isFinished)
+        {
+            ReadResultFile();
+
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+
+    void ReadResultFile()
+    {
+        if (!File.Exists(resultFilePath))
+        {
+            Debug.LogWarning("result.txt が見つかりません");
+            return;
+        }
+
+        try
+        {
+            string text = File.ReadAllText(resultFilePath).Trim();
+
+            Debug.Log("result.txt の中身：" + text);
+
+            if (int.TryParse(text, out int value))
+            {
+                Debug.Log("読み取った判定値：" + value);
+                ChangeState(value);
+            }
+            else
+            {
+                Debug.LogWarning("0/1/2として読み取れません：" + text);
+            }
+        }
+    catch (System.Exception e)
+    {
+        Debug.LogError("result.txt読み込みエラー：" + e.Message);
+    }
+}
+
+    void ChangeState(int value)
+    {
+        if (isFinished) return;
+
+        if (value == 0)
+        {
             SetFocus();
-
-        if (Keyboard.current.digit2Key.wasPressedThisFrame)
+        }
+        else if (value == 1)
+        {
             SetDanger();
-
-        if (Keyboard.current.digit3Key.wasPressedThisFrame)
+        }
+        else if (value == 2)
+        {
             SetOut();
+        }
     }
 
     public void SetFocus()
     {
-        currentState = 1;
+        currentState = 0;
 
         statusText.text = "集中している";
         statusPanel.color = focusColor;
@@ -65,10 +116,13 @@ public class StatusUIController : MonoBehaviour
 
     public void SetDanger()
     {
-        currentState = 2;
+        // 0→1になった瞬間だけ回数を増やす
+        if (currentState != 1)
+        {
+            dangerCount++;
+        }
 
-        // 「危ない」になった回数を1増やす
-        dangerCount++;
+        currentState = 1;
 
         statusText.text = "危ない";
         statusPanel.color = dangerColor;
@@ -78,7 +132,7 @@ public class StatusUIController : MonoBehaviour
     {
         if (isFinished) return;
 
-        currentState = 3;
+        currentState = 2;
         isFinished = true;
 
         StartCoroutine(OutSequence());
@@ -86,17 +140,14 @@ public class StatusUIController : MonoBehaviour
 
     IEnumerator OutSequence()
     {
-        // 「喝！」を表示
         statusText.text = "喝！";
         statusPanel.color = outColor;
 
-        // ここでセンサを発動
+        // ここに振動センサ処理を入れる
         // SendVibration();
 
-        // 3秒待つ
         yield return new WaitForSeconds(3f);
 
-        // リザルト画面へ
         SceneManager.LoadScene("result");
     }
 }
