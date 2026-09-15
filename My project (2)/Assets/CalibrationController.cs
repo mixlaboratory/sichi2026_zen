@@ -3,6 +3,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class CalibrationController : MonoBehaviour
 {
@@ -17,22 +18,19 @@ public class CalibrationController : MonoBehaviour
 
     public Button startButton;
 
-
-    // MyBrainApp の output フォルダ
-    private readonly string outputFolder =
-        @"C:\Users\manam\OneDrive\デスクトップ\MixLab\SICHI\2026\neu_ExBrainSdk_dotnet_v3.1.0\samples\MyBrainApp\bin\Debug\net8.0\output";
+    [SerializeField]
+    private TextMeshProUGUI calibrationText;
 
     private string commandPath;
     private string calibrationPath;
 
     private bool calibrationCompleted = false;
 
+    // コルーチンを停止できるように変数で保持
+    private Coroutine fadeCoroutine;
 
     void Start()
     {
-        commandPath = Path.Combine(outputFolder, "command.txt");
-        calibrationPath = Path.Combine(outputFolder, "calibration.txt");
-
         // 最初は「キャリブレーション中」の画像
         calibrationImage.sprite = calibratingSprite;
 
@@ -44,29 +42,57 @@ public class CalibrationController : MonoBehaviour
 
         // calibration.txt の監視開始
         StartCoroutine(CheckCalibration());
+
+        // フェード処理の開始（正しい名前を指定）
+        fadeCoroutine = StartCoroutine(FadeInOutRoutine());
     }
 
+    // 徐々に透明・不透明を繰り返すコルーチン
+    IEnumerator FadeInOutRoutine()
+    {
+        float duration = 1.0f; // フェードにかける時間（秒）
+
+        while (true)
+        {
+            // フェードアウト（透明にする）
+            float elapsedTime = 0f;
+            Color startColor = calibrationText.color;
+            while (elapsedTime < duration)
+            {
+                elapsedTime += Time.deltaTime;
+                float alpha = Mathf.Lerp(1f, 0f, elapsedTime / duration);
+                calibrationText.color = new Color(startColor.r, startColor.g, startColor.b, alpha);
+                yield return null;
+            }
+
+            // フェードイン（不透明にする）
+            elapsedTime = 0f;
+            while (elapsedTime < duration)
+            {
+                elapsedTime += Time.deltaTime;
+                float alpha = Mathf.Lerp(0f, 1f, elapsedTime / duration);
+                calibrationText.color = new Color(startColor.r, startColor.g, startColor.b, alpha);
+                yield return null;
+            }
+        }
+    }
 
     void StartCalibration()
     {
         try
         {
+            // 1 = キャリブレーション開始
             File.WriteAllText(commandPath, "1");
-
-            Debug.Log("command.txt に 1 を書き込みました");
-            Debug.Log("書き込み先: " + commandPath);
+            Debug.Log("脳血流センサへキャリブレーション開始を送信しました");
         }
         catch (System.Exception e)
         {
-            Debug.LogError("command.txt 書き込み失敗: " + e.Message);
+            Debug.LogError("command.txt に書き込めませんでした：" + e.Message);
         }
     }
 
-
     IEnumerator CheckCalibration()
     {
-        // 前回の calibration.txt = 1 を
-        // 間違って完了扱いしないためのフラグ
         bool sawCalibrationStart = false;
 
         while (!calibrationCompleted)
@@ -75,17 +101,13 @@ public class CalibrationController : MonoBehaviour
             {
                 try
                 {
-                    string value =
-                        File.ReadAllText(calibrationPath).Trim();
+                    string value = File.ReadAllText(calibrationPath).Trim();
 
-                    // MyBrainAppがキャリブレーションを開始すると
-                    // calibration.txt = 0
                     if (value == "0")
                     {
                         sawCalibrationStart = true;
                     }
 
-                    // 一度0になったあと1になったら本当に完了
                     if (sawCalibrationStart && value == "1")
                     {
                         CompleteCalibration();
@@ -94,19 +116,25 @@ public class CalibrationController : MonoBehaviour
                 }
                 catch
                 {
-                    // MyBrainAppがファイル書き込み中の場合は
-                    // 次の確認まで待つ
+                    // ファイル競合時は次回ループへ
                 }
             }
-
             yield return new WaitForSeconds(0.2f);
         }
     }
 
-
     void CompleteCalibration()
     {
         calibrationCompleted = true;
+
+        // フェードコルーチンを安全に停止
+        if (fadeCoroutine != null)
+        {
+            StopCoroutine(fadeCoroutine);
+        }
+
+        // テキストオブジェクトを非アクティブにする（バグ修正）
+        calibrationText.gameObject.SetActive(false);
 
         // 完了画像へ切り替え
         calibrationImage.sprite = completedSprite;
@@ -117,27 +145,19 @@ public class CalibrationController : MonoBehaviour
         Debug.Log("キャリブレーション完了");
     }
 
-
     public void OnClickStart()
     {
-        if (!calibrationCompleted)
-        {
-            return;
-        }
+        if (!calibrationCompleted) return;
 
         try
         {
             // 2 = リアルタイム判定開始
             File.WriteAllText(commandPath, "2");
-
             Debug.Log("脳血流判定開始");
         }
         catch (System.Exception e)
         {
-            Debug.LogError(
-                "command.txt に書き込めませんでした：" + e.Message
-            );
-
+            Debug.LogError("command.txt に書き込めませんでした：" + e.Message);
             return;
         }
 
