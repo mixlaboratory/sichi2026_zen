@@ -1,6 +1,7 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class StartCountdown : MonoBehaviour
 {
@@ -15,12 +16,12 @@ public class StartCountdown : MonoBehaviour
 
     IEnumerator Countdown()
     {
-        messageText.text = "Cs‚ğŠJn‚µ‚Ü‚·";
+        messageText.text = "ä¿®è¡Œã‚’é–‹å§‹ã—ã¾ã™";
         countdownText.text = "";
 
         yield return new WaitForSeconds(1.5f);
 
-        // uCs‚ğŠJn‚µ‚Ü‚·v‚ğÁ‚·
+        // ï¿½uï¿½Cï¿½sï¿½ï¿½Jï¿½nï¿½ï¿½ï¿½Ü‚ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½
         messageText.text = "";
 
         countdownText.text = "3";
@@ -32,9 +33,10 @@ public class StartCountdown : MonoBehaviour
         countdownText.text = "1";
         yield return new WaitForSeconds(1f);
 
-        countdownText.text = "ŠJn";
+        countdownText.text = "é–‹å§‹";
         yield return new WaitForSeconds(1f);
 
-        startPanel.SetActive(false);
+        SceneManager.LoadScene("game");
+        //startPanel.SetActive(false);
     }
 }

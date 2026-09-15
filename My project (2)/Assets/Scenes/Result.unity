@@ -293,7 +293,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 402414122}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 625697669}
+        m_TargetAssemblyTypeName: ChangeScene, Assembly-CSharp
+        m_MethodName: SceneChange
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Title
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &402414122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -528,8 +540,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u30BF\u30A4\u30C8\u30EB\u3078"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 04e50ea910cf22e46a36a754f10bf0a3, type: 2}
-  m_sharedMaterial: {fileID: 5549558975872157791, guid: 04e50ea910cf22e46a36a754f10bf0a3, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: f00a7ef02b0716442a6d6acaaed6dc93, type: 2}
+  m_sharedMaterial: {fileID: -1327072590433568957, guid: f00a7ef02b0716442a6d6acaaed6dc93, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -606,6 +618,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 456788792}
   m_CullTransparentMesh: 1
+--- !u!1 &625697668
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 625697670}
+  - component: {fileID: 625697669}
+  m_Layer: 0
+  m_Name: SceneManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &625697669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 625697668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4da11471b7772c4b91afe54eed40497, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChangeScene
+  currentScreen: {fileID: 0}
+--- !u!4 &625697670
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 625697668}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &738248645
 GameObject:
   m_ObjectHideFlags: 0
@@ -779,8 +836,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9913076f877a34246ab51ecef6666152, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResultUI
-  focusTimeText: {fileID: 2135564659}
-  dangerCountText: {fileID: 1599342839}
 --- !u!114 &847658988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -793,8 +848,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85f995f1a5fae1e4c9bed07c5f57ccdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StampEffect
-  stampImage: {fileID: 1624703653}
-  stampSound: {fileID: 847658989}
 --- !u!82 &847658989
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1503,3 +1556,4 @@ SceneRoots:
   - {fileID: 327215786}
   - {fileID: 2069132673}
   - {fileID: 738248648}
+  - {fileID: 625697670}

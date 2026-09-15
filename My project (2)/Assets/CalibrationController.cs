@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
@@ -7,10 +7,10 @@ public class CalibrationController : MonoBehaviour
 {
     public Image calibrationImage;
 
-    // 1–‡–ÚFƒLƒƒƒŠƒuƒŒ[ƒVƒ‡ƒ“’†
+    // 1ï¿½ï¿½ï¿½ÚFï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½uï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public Sprite calibratingSprite;
 
-    // 2–‡–ÚFƒLƒƒƒŠƒuƒŒ[ƒVƒ‡ƒ“Š®—¹
+    // 2ï¿½ï¿½ï¿½ÚFï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½uï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public Sprite completedSprite;
 
     public Button startButton;
@@ -20,7 +20,7 @@ public class CalibrationController : MonoBehaviour
     void Start()
     {
         calibrationImage.sprite = calibratingSprite;
-        startButton.interactable = false;
+        startButton.gameObject.SetActive(false);
     }
 
     void Update()
@@ -36,9 +36,9 @@ public class CalibrationController : MonoBehaviour
         isCompleted = true;
 
         calibrationImage.sprite = completedSprite;
-        startButton.interactable = true;
+        startButton.gameObject.SetActive(true);
 
-        Debug.Log("ƒLƒƒƒŠƒuƒŒ[ƒVƒ‡ƒ“Š®—¹");
+        Debug.Log("ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½uï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
     }
 
     public void OnClickStart()
