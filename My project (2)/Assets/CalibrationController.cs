@@ -51,16 +51,14 @@ public class CalibrationController : MonoBehaviour
     {
         try
         {
-            // 1 = キャリブレーション開始
             File.WriteAllText(commandPath, "1");
 
-            Debug.Log("脳血流センサへキャリブレーション開始を送信しました");
+            Debug.Log("command.txt に 1 を書き込みました");
+            Debug.Log("書き込み先: " + commandPath);
         }
         catch (System.Exception e)
         {
-            Debug.LogError(
-                "command.txt に書き込めませんでした：" + e.Message
-            );
+            Debug.LogError("command.txt 書き込み失敗: " + e.Message);
         }
     }
 
